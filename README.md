@@ -1,159 +1,85 @@
-# Turborepo starter
+# 🚀 Sonic Serve AI
 
-This Turborepo starter is maintained by the Turborepo core team.
+**Sonic Serve AI** is a high-performance, real-time voice assistant platform designed for the next generation of conversational AI. Built with low-latency in mind, it combines state-of-the-art Speech-to-Text (STT), Large Language Models (LLM), and Text-to-Speech (TTS) to provide a seamless human-like interaction experience.
 
-## Using this example
+![Sonic Serve AI Banner](https://images.unsplash.com/photo-1589254065878-42c9da997008?q=80&w=2070&auto=format&fit=crop)
 
-Run the following command:
+## ✨ Features
 
-```sh
-npx create-turbo@latest
-```
+- **Real-Time Voice Pipeline**: Sub-second latency using WebSocket-based audio streaming.
+- **Advanced AI Stack**:
+  - **STT**: Deepgram Nova-2 (Industry-leading accuracy).
+  - **LLM**: Google gemini-3-flash-preview (Advanced Intelligence with Exceptional Speed).
+  - **TTS**: Deepgram Aura (Natural, human-like voice synthesis).
+- **Intelligent RAG**: Integrated Retrieval-Augmented Generation using Pinecone for long-term memory and context-aware responses.
+- **Enterprise Dashboard**: Manage agents, monitor API usage, and track call analytics in real-time.
+- **Self-Healing Infrastructure**: Automated database initialization and robust error recovery.
 
-## What's inside?
+## 🛠️ Technology Stack
 
-This Turborepo includes the following packages/apps:
+- **Monorepo**: [Turborepo](https://turbo.build/)
+- **Frontend**: [Next.js 15](https://nextjs.org/) (App Router), Tailwind CSS
+- **Backend**: Node.js, Express, WebSocket (ws)
+- **Database**: PostgreSQL (pg), Redis
+- **Vector DB**: Pinecone
+- **Infrastructure**: Docker & Docker Compose
+- **Auth**: NextAuth.js
 
-### Apps and Packages
+## 🚀 Getting Started
 
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
+### Prerequisites
 
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
+- Node.js >= 18
+- Docker Desktop
+- API Keys for: Deepgram, Google Gemini, and Pinecone
 
-### Utilities
+### Installation
 
-This Turborepo has some additional tools already setup for you:
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/[your-username]/SonicServeAI.git
+   cd SonicServeAI
+   ```
 
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
+2. **Configure Environment Variables**:
+   Create a `.env` file in the root based on `.env.example`:
+   ```bash
+   cp .env.example .env
+   ```
+   *Fill in your API keys in the `.env` file.*
 
-### Build
+3. **Install Dependencies**:
+   ```bash
+   npm install
+   ```
 
-To build all apps and packages, run the following command:
+4. **Start Infrastructure (Docker)**:
+   ```bash
+   docker-compose up -d
+   ```
 
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended):
+5. **Run Development Server**:
+   ```bash
+   npm run dev
+   ```
 
-```sh
-cd my-turborepo
-turbo build
-```
+## 📂 Project Structure
 
-Without global `turbo`, use your package manager:
+- `apps/web`: The Next.js dashboard and landing page.
+- `apps/api`: The Node.js server handling the voice pipeline and business logic.
+- `packages/shared`: Shared types and utility functions.
+- `packages/typescript-config`: Centralized TS configuration.
 
-```sh
-cd my-turborepo
-npx turbo build
-npm dlx turbo build
-npm exec turbo build
-```
+## 🔒 Security
 
-You can build a specific package by using a [filter](https://turborepo.dev/docs/crafting-your-repository/running-tasks#using-filters):
+- Sensitive credentials are managed via environment variables.
+- The `.env` file is strictly ignored by Git.
+- Database connections are secured within the Docker network.
 
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed:
+---
 
-```sh
-turbo build --filter=docs
-```
+## 📄 License
 
-Without global `turbo`:
+Distributed under the MIT License. See `LICENSE` for more information.
 
-```sh
-npx turbo build --filter=docs
-npm exec turbo build --filter=docs
-npm exec turbo build --filter=docs
-```
 
-### Develop
-
-To develop all apps and packages, run the following command:
-
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended):
-
-```sh
-cd my-turborepo
-turbo dev
-```
-
-Without global `turbo`, use your package manager:
-
-```sh
-cd my-turborepo
-npx turbo dev
-npm exec turbo dev
-npm exec turbo dev
-```
-
-You can develop a specific package by using a [filter](https://turborepo.dev/docs/crafting-your-repository/running-tasks#using-filters):
-
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed:
-
-```sh
-turbo dev --filter=web
-```
-
-Without global `turbo`:
-
-```sh
-npx turbo dev --filter=web
-npm exec turbo dev --filter=web
-npm exec turbo dev --filter=web
-```
-
-### Remote Caching
-
-> [!TIP]
-> Vercel Remote Cache is free for all plans. Get started today at [vercel.com](https://vercel.com/signup?utm_source=remote-cache-sdk&utm_campaign=free_remote_cache).
-
-Turborepo can use a technique known as [Remote Caching](https://turborepo.dev/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
-
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup?utm_source=turborepo-examples), then enter the following commands:
-
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended):
-
-```sh
-cd my-turborepo
-turbo login
-```
-
-Without global `turbo`, use your package manager:
-
-```sh
-cd my-turborepo
-npx turbo login
-npm exec turbo login
-npm exec turbo login
-```
-
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
-
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
-
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed:
-
-```sh
-turbo link
-```
-
-Without global `turbo`:
-
-```sh
-npx turbo link
-npm exec turbo link
-npm exec turbo link
-```
-
-## Useful Links
-
-Learn more about the power of Turborepo:
-
-- [Tasks](https://turborepo.dev/docs/crafting-your-repository/running-tasks)
-- [Caching](https://turborepo.dev/docs/crafting-your-repository/caching)
-- [Remote Caching](https://turborepo.dev/docs/core-concepts/remote-caching)
-- [Filtering](https://turborepo.dev/docs/crafting-your-repository/running-tasks#using-filters)
-- [Configuration Options](https://turborepo.dev/docs/reference/configuration)
-- [CLI Usage](https://turborepo.dev/docs/reference/command-line-reference)

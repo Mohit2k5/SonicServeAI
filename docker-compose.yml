@@ -1,0 +1,25 @@
+# Standard Docker setup for local development.
+# Only Postgres and Redis are needed here because we run the API/Web app
+# directly on the host machine with 'npm run dev' for faster development.
+version: '3.8'
+name: sonic-serve-ai
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_DB: sonic_serve_ai
+      POSTGRES_USER: sonic_admin
+      POSTGRES_PASSWORD: sonic_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+
+volumes:
+  pgdata:

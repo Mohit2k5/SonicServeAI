@@ -1,8 +1,9 @@
 {
-  "name": "vaani",
+  "name": "sonic-serve-ai",
   "private": true,
   "scripts": {
     "build": "turbo run build",
+    "predev": "node kill-dev-ports.cjs",
     "dev": "turbo run dev",
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",

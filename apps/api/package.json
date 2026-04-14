@@ -1,0 +1,46 @@
+{
+  "name": "sonic-serve-ai-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon src/index.ts",
+    "start": "ts-node src/index.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "@types/form-data": "^2.2.1",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/node": "^22.19.17",
+    "@types/node-fetch": "^2.6.13",
+    "@types/pg": "^8.20.0",
+    "@types/ws": "^8.18.1",
+    "nodemon": "^3.1.14",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.2"
+  },
+  "dependencies": {
+    "@pinecone-database/pinecone": "^7.2.0",
+    "bcryptjs": "^3.0.3",
+    "cors": "^2.8.6",
+    "dotenv": "^16.0.3",
+    "express": "^5.2.1",
+    "form-data": "^4.0.5",
+    "helmet": "^8.1.0",
+    "jsonwebtoken": "^9.0.3",
+    "node-fetch": "^3.3.2",
+    "openai": "^6.34.0",
+    "pg": "^8.20.0",
+    "redis": "^5.11.0",
+    "stripe": "^22.0.1",
+    "ws": "^8.20.0",
+    "zod": "^4.3.6"
+  }
+}

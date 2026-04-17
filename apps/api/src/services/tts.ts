@@ -3,34 +3,41 @@ interface TtsResult {
   mimeType: string;
 }
 
-export async function textToSpeech(text: string, voiceModel: string = 'aura-asteria-en'): Promise<TtsResult> {
+export async function textToSpeech(text: string, voiceModel: string = 'alloy'): Promise<TtsResult> {
   const normalizedText = typeof text === 'string' ? text.trim() : '';
   if (!normalizedText) {
     throw new Error('TTS input is empty after normalization.');
   }
 
-  const resolvedModel = typeof voiceModel === 'string' && voiceModel.trim().length > 0
-    ? voiceModel.trim()
-    : 'aura-asteria-en';
+  // Google Translate TTS is 100% free but limits requests to 200 characters each.
+  // We chunk sentences and stitch the audio buffers.
+  const chunks = normalizedText.match(/[^.!?]+[.!?]*|.+/g) || [normalizedText];
+  const buffers: Buffer[] = [];
 
-  // Deepgram limit is 2000 chars. Truncate if necessary for stability.
-  const safeText = normalizedText.slice(0, 1990);
-
-  const res = await fetch(`https://api.deepgram.com/v1/speak?model=${encodeURIComponent(resolvedModel)}&encoding=mp3`, {
-    method: 'POST',
-    headers: {
-      'Authorization': `Token ${process.env.DEEPGRAM_API_KEY}`,
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({ text: safeText })
-  });
-
-  if (!res.ok) {
-    const errorBody = await res.text();
-    throw new Error(`Deepgram TTS error (${res.status}): ${errorBody}`);
+  for (let chunk of chunks) {
+    chunk = chunk.trim();
+    if (!chunk) continue;
+    
+    // Fallback if a chunk is still over 200 somehow
+    while (chunk.length > 0) {
+      const subChunk = chunk.substring(0, 200);
+      chunk = chunk.substring(200);
+      
+      const url = `https://translate.google.com/translate_tts?ie=UTF-8&q=${encodeURIComponent(subChunk)}&tl=en&client=tw-ob`;
+      
+      const res = await fetch(url);
+      if (res.ok) {
+        const arrayBuffer = await res.arrayBuffer();
+        buffers.push(Buffer.from(arrayBuffer));
+      } else {
+        console.warn(`[TTS] Free Google TTS chunk failed with status: ${res.status}`);
+      }
+    }
   }
 
-  const mimeType = res.headers.get('content-type') || 'audio/mpeg';
-  const arrayBuffer = await res.arrayBuffer();
-  return { audioBuffer: Buffer.from(arrayBuffer), mimeType };
+  if (buffers.length === 0) {
+    throw new Error('Failed to generate any TTS audio via free endpoint.');
+  }
+
+  return { audioBuffer: Buffer.concat(buffers), mimeType: 'audio/mpeg' };
 }

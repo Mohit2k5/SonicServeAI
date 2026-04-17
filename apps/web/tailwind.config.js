@@ -9,10 +9,12 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        inter: ['var(--font-inter)'],
-        grotesk: ['var(--font-grotesk)'],
+        sans: ["var(--font-sans)"],
+        mono: ["var(--font-mono)"],
+        inter: ["var(--font-sans)"],
+        grotesk: ["var(--font-sans)"],
       },
     },
   },
   plugins: [],
-}
+};

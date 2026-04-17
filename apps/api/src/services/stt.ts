@@ -1,30 +1,55 @@
-import fetch from 'node-fetch';
-
-export async function speechToText(audioBuffer: Buffer, languageCode: string = 'hi'): Promise<string> {
-  const apiKey = process.env.DEEPGRAM_API_KEY;
+export async function speechToText(audioBuffer: Buffer, languageCode: string = 'en'): Promise<string> {
+  const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) {
-    throw new Error('DEEPGRAM_API_KEY is missing');
-  }
-
-  // Deepgram supports webm directly
-  const res = await fetch('https://api.deepgram.com/v1/listen?model=nova-2&smart_format=true&language=' + (languageCode === 'hi' ? 'hi' : 'en'), {
-    method: 'POST',
-    headers: {
-      'Authorization': `Token ${apiKey}`,
-      'Content-Type': 'audio/webm'
-    },
-    body: audioBuffer
-  });
-
-  if (!res.ok) {
-    const errorBody = await res.text();
-    console.error(`[STT] Deepgram error: ${errorBody}`);
+    console.error('[STT] Error: GEMINI_API_KEY is missing from environment variables');
     return '';
   }
 
-  const data = await res.json() as any;
-  const transcript = data.results?.channels?.[0]?.alternatives?.[0]?.transcript || '';
-  
-  console.log(`[STT] Transcribed: "${transcript}"`);
-  return transcript;
+  try {
+    const base64Audio = audioBuffer.toString('base64');
+    const model = process.env.GEMINI_MODEL || 'gemini-1.5-flash';
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+
+    const langInstruction = languageCode.startsWith('hi') ? 'in Hindi script' : 'in English';
+
+    const body = {
+      contents: [
+        {
+          parts: [
+            { text: `You are an expert transcriber. Transcribe the following audio exactly as spoken ${langInstruction}. Output ONLY the transcribed text without quotes, formatting, or commentary. Do not invent speech if there is silence.` },
+            {
+              inlineData: {
+                mimeType: 'audio/webm',
+                data: base64Audio
+              }
+            }
+          ]
+        }
+      ],
+      generationConfig: {
+        temperature: 0.1
+      }
+    };
+
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+
+    if (!res.ok) {
+      const errorBody = await res.text();
+      console.error(`[STT] Gemini Error (${res.status}): ${errorBody}`);
+      return '';
+    }
+
+    const data = await res.json() as any;
+    const transcript = data?.candidates?.[0]?.content?.parts?.[0]?.text || '';
+    
+    console.log(`[STT] Transcribed: "${transcript.trim()}"`);
+    return transcript.trim();
+  } catch (error) {
+    console.error(`[STT] Fatal error connecting to Gemini:`, error);
+    return '';
+  }
 }

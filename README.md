@@ -4,7 +4,7 @@
 
 ![Sonic Serve AI Banner](https://images.unsplash.com/photo-1589254065878-42c9da997008?q=80&w=2070&auto=format&fit=crop)
 
-## ✨ Features
+## ✨ Key Features
 
 - **Real-Time Voice Pipeline**: Sub-second latency using WebSocket-based audio streaming.
 - **Advanced AI Stack**:

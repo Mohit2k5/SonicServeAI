@@ -36,6 +36,7 @@
 ### Installation
 
 1. **Clone the repository**:
+
    ```bash
    git clone https://github.com/[your-username]/SonicServeAI.git
    cd SonicServeAI
@@ -43,17 +44,21 @@
 
 2. **Configure Environment Variables**:
    Create a `.env` file in the root based on `.env.example`:
+
    ```bash
    cp .env.example .env
    ```
-   *Fill in your API keys in the `.env` file.*
+
+   _Fill in your API keys in the `.env` file._
 
 3. **Install Dependencies**:
+
    ```bash
    npm install
    ```
 
 4. **Start Infrastructure (Docker)**:
+
    ```bash
    docker-compose up -d
    ```
@@ -81,5 +86,3 @@
 ## 📄 License
 
 Distributed under the MIT License. See `LICENSE` for more information.
-
-

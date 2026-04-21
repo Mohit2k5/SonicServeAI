@@ -19,29 +19,34 @@ export class VaaniAgent {
   }
 
   async connect() {
-    const wsUrl = `${process.env.NEXT_PUBLIC_WS_URL || 'ws://localhost:4000'}/voice?agentId=${this.config.agentId}&apiKey=${this.config.apiKey}`;
+    const wsUrl = `${process.env.NEXT_PUBLIC_WS_URL || "ws://localhost:4000"}/voice?agentId=${this.config.agentId}&apiKey=${this.config.apiKey}`;
     this.ws = new WebSocket(wsUrl);
 
     this.ws.onmessage = (event) => {
-      if (typeof event.data === 'string') {
+      if (typeof event.data === "string") {
         try {
           const msg = JSON.parse(event.data);
-          if (msg.type === 'transcript') this.config.onTranscript?.(msg.text);
-          if (msg.type === 'response_text') this.config.onResponse?.(msg.text);
-          if (msg.type === 'error') this.config.onError?.(new Error(msg.message));
+          if (msg.type === "transcript") this.config.onTranscript?.(msg.text);
+          if (msg.type === "response_text") this.config.onResponse?.(msg.text);
+          if (msg.type === "error")
+            this.config.onError?.(new Error(msg.message));
         } catch (e) {
           // If it's not JSON, it might be raw audio handled below
         }
-      } else if (event.data instanceof Blob || event.data instanceof ArrayBuffer) {
+      } else if (
+        event.data instanceof Blob ||
+        event.data instanceof ArrayBuffer
+      ) {
         // Handle raw audio buffer
         this.config.onAudio?.(event.data as ArrayBuffer);
       }
     };
 
-    this.ws.onerror = (err) => this.config.onError?.(new Error('WebSocket error'));
+    this.ws.onerror = (err) =>
+      this.config.onError?.(new Error("WebSocket error"));
 
     return new Promise<void>((resolve, reject) => {
-      if (!this.ws) return reject(new Error('WS not initialized'));
+      if (!this.ws) return reject(new Error("WS not initialized"));
       this.ws.onopen = () => resolve();
     });
   }
@@ -50,13 +55,13 @@ export class VaaniAgent {
     try {
       this.stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       this.mediaRecorder = new MediaRecorder(this.stream);
-      
+
       this.mediaRecorder.ondataavailable = (e) => {
         if (e.data.size > 0 && this.ws?.readyState === WebSocket.OPEN) {
           this.ws.send(e.data);
         }
       };
-      
+
       this.mediaRecorder.start(250); // send chunks every 250ms
     } catch (err: any) {
       this.config.onError?.(err);
@@ -65,7 +70,7 @@ export class VaaniAgent {
 
   stopRecording() {
     this.mediaRecorder?.stop();
-    this.stream?.getTracks().forEach(track => track.stop());
+    this.stream?.getTracks().forEach((track) => track.stop());
   }
 
   disconnect() {

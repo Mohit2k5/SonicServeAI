@@ -103,7 +103,10 @@ export default function DashboardPage() {
                 place.
               </p>
             </div>
-            <Link href="/dashboard/agents" className="btn btn-accent focus-ring">
+            <Link
+              href="/dashboard/agents"
+              className="btn btn-accent focus-ring"
+            >
               Create agent
               <ArrowRightIcon className="h-4 w-4" />
             </Link>
@@ -138,10 +141,10 @@ export default function DashboardPage() {
       <section>
         <div className="mb-6 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <p className="section-kicker">
-              Activity feed
-            </p>
-            <h3 className="mt-2 text-2xl font-extrabold">Recent voice sessions</h3>
+            <p className="section-kicker">Activity feed</p>
+            <h3 className="mt-2 text-2xl font-extrabold">
+              Recent voice sessions
+            </h3>
           </div>
           <Link
             href="/dashboard/logs"
@@ -209,30 +212,30 @@ export default function DashboardPage() {
           </div>
 
           <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-1">
-          <Link
-            href="/dashboard/agents"
-            className="panel focus-ring block p-5 transition hover:border-[var(--color-primary)]"
-          >
-            <span className="mb-5 flex h-11 w-11 items-center justify-center rounded-lg bg-[var(--color-primary)] text-white">
-              <MicIcon className="h-5 w-5" />
-            </span>
-            <h3 className="text-lg font-extrabold">Create a voice agent</h3>
-            <p className="mt-2 text-sm leading-6 text-[var(--color-muted)]">
-              Choose a language, set the behavior, and start a live test.
-            </p>
-          </Link>
-          <Link
-            href="/docs"
-            className="panel focus-ring block p-5 transition hover:border-[var(--color-primary)]"
-          >
-            <span className="mb-5 flex h-11 w-11 items-center justify-center rounded-lg bg-[var(--color-surface-muted)] text-[var(--color-primary)]">
-              <CodeIcon className="h-5 w-5" />
-            </span>
-            <h3 className="text-lg font-extrabold">Open the API guide</h3>
-            <p className="mt-2 text-sm leading-6 text-[var(--color-muted)]">
-              Review agent creation, streaming, and SDK setup.
-            </p>
-          </Link>
+            <Link
+              href="/dashboard/agents"
+              className="panel focus-ring block p-5 transition hover:border-[var(--color-primary)]"
+            >
+              <span className="mb-5 flex h-11 w-11 items-center justify-center rounded-lg bg-[var(--color-primary)] text-white">
+                <MicIcon className="h-5 w-5" />
+              </span>
+              <h3 className="text-lg font-extrabold">Create a voice agent</h3>
+              <p className="mt-2 text-sm leading-6 text-[var(--color-muted)]">
+                Choose a language, set the behavior, and start a live test.
+              </p>
+            </Link>
+            <Link
+              href="/docs"
+              className="panel focus-ring block p-5 transition hover:border-[var(--color-primary)]"
+            >
+              <span className="mb-5 flex h-11 w-11 items-center justify-center rounded-lg bg-[var(--color-surface-muted)] text-[var(--color-primary)]">
+                <CodeIcon className="h-5 w-5" />
+              </span>
+              <h3 className="text-lg font-extrabold">Open the API guide</h3>
+              <p className="mt-2 text-sm leading-6 text-[var(--color-muted)]">
+                Review agent creation, streaming, and SDK setup.
+              </p>
+            </Link>
           </div>
         </div>
       </section>

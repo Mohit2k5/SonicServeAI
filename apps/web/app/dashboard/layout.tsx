@@ -127,7 +127,9 @@ export default function DashboardLayout({
               <p className="mt-2 text-xs font-extrabold uppercase tracking-wide text-[var(--color-accent-strong)] lg:mt-0">
                 Operations
               </p>
-              <h1 className="truncate text-xl font-extrabold">{currentLabel}</h1>
+              <h1 className="truncate text-xl font-extrabold">
+                {currentLabel}
+              </h1>
               <p className="mt-1 truncate text-sm font-bold text-[var(--color-muted)]">
                 Home
                 {breadcrumb.map((segment) => ` / ${segment}`)}

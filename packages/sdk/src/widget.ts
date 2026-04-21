@@ -5,18 +5,18 @@ class VaaniWidget extends HTMLElement {
   private isRecording = false;
 
   connectedCallback() {
-    const agentId = this.getAttribute('agent-id');
-    const apiKey = this.getAttribute('api-key');
+    const agentId = this.getAttribute("agent-id");
+    const apiKey = this.getAttribute("api-key");
 
     if (!agentId || !apiKey) return;
 
     this.agent = new VaaniAgent({
       agentId,
       apiKey,
-      onError: (err) => console.error('Vaani Error:', err)
+      onError: (err) => console.error("Vaani Error:", err),
     });
 
-    const shadow = this.attachShadow({ mode: 'open' });
+    const shadow = this.attachShadow({ mode: "open" });
     shadow.innerHTML = `
       <style>
         .vaani-btn { 
@@ -36,27 +36,27 @@ class VaaniWidget extends HTMLElement {
       </button>
     `;
 
-    const btn = shadow.getElementById('btn');
-    btn?.addEventListener('click', () => this.toggleRecording());
+    const btn = shadow.getElementById("btn");
+    btn?.addEventListener("click", () => this.toggleRecording());
   }
 
   async toggleRecording() {
     if (!this.agent) return;
-    const btn = this.shadowRoot?.getElementById('btn');
+    const btn = this.shadowRoot?.getElementById("btn");
 
     if (this.isRecording) {
       this.agent.stopRecording();
       this.isRecording = false;
-      btn?.classList.remove('recording');
+      btn?.classList.remove("recording");
     } else {
       await this.agent.connect();
       await this.agent.startRecording();
       this.isRecording = true;
-      btn?.classList.add('recording');
+      btn?.classList.add("recording");
     }
   }
 }
 
-if (!customElements.get('vaani-widget')) {
-  customElements.define('vaani-widget', VaaniWidget);
+if (!customElements.get("vaani-widget")) {
+  customElements.define("vaani-widget", VaaniWidget);
 }

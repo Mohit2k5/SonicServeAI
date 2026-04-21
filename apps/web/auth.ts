@@ -9,9 +9,15 @@ type SonicServeUser = {
   plan?: string;
 };
 
-export const { handlers } = NextAuth({
+console.log("🔐 Auth.js configuration initializing...");
+console.log(
+  "AUTH_SECRET exists:",
+  !!(process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET),
+);
+
+export const { handlers, auth, signIn, signOut } = NextAuth({
   trustHost: true,
-  secret: process.env.AUTH_SECRET,
+  secret: process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET,
   providers: [
     CredentialsProvider({
       name: "credentials",
@@ -34,30 +40,40 @@ export const { handlers } = NextAuth({
   ],
   callbacks: {
     async jwt({ token, user }) {
-      if (user) {
-        const sonicUser = user as SonicServeUser;
-        token.accessToken = sonicUser.accessToken;
-        token.api_key = sonicUser.api_key;
-        token.id = sonicUser.id;
-        token.plan = sonicUser.plan;
+      try {
+        if (user) {
+          const sonicUser = user as SonicServeUser;
+          token.accessToken = sonicUser.accessToken;
+          token.api_key = sonicUser.api_key;
+          token.id = sonicUser.id;
+          token.plan = sonicUser.plan;
+        }
+        return token;
+      } catch (err) {
+        console.error("❌ JWT Callback Error:", err);
+        return token;
       }
-      return token;
     },
     async session({ session, token }) {
-      session.accessToken =
-        typeof token.accessToken === "string" ? token.accessToken : undefined;
-      if (session.user) {
-        if (typeof token.api_key === "string") {
-          session.user.api_key = token.api_key;
+      try {
+        session.accessToken =
+          typeof token.accessToken === "string" ? token.accessToken : undefined;
+        if (session.user) {
+          if (typeof token.api_key === "string") {
+            session.user.api_key = token.api_key;
+          }
+          if (typeof token.id === "string") {
+            session.user.id = token.id;
+          }
+          if (typeof token.plan === "string") {
+            session.user.plan = token.plan;
+          }
         }
-        if (typeof token.id === "string") {
-          session.user.id = token.id;
-        }
-        if (typeof token.plan === "string") {
-          session.user.plan = token.plan;
-        }
+        return session;
+      } catch (err) {
+        console.error("❌ Session Callback Error:", err);
+        return session;
       }
-      return session;
     },
   },
   pages: { signIn: "/login" },

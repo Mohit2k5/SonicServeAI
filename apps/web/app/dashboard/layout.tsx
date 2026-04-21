@@ -1,5 +1,5 @@
 "use client";
-import { useSession } from "next-auth/react";
+import { useSession, signOut } from "next-auth/react";
 import { useRouter, usePathname } from "next/navigation";
 import { useEffect } from "react";
 import Link from "next/link";
@@ -98,7 +98,9 @@ export default function DashboardLayout({
             );
           })}
         </nav>
-        <div className="border-t border-[var(--color-border)] p-4">
+
+        {/* Sidebar bottom — user info + logout */}
+        <div className="border-t border-[var(--color-border)] p-4 space-y-3">
           <div className="panel-muted p-4">
             <p className="text-sm font-extrabold text-[var(--color-muted)]">
               Current plan
@@ -109,6 +111,30 @@ export default function DashboardLayout({
             <p className="mt-2 text-xs font-bold text-[var(--color-muted)]">
               Upgrade for enterprise governance and dedicated capacity.
             </p>
+          </div>
+
+          {/* User row + logout */}
+          <div className="flex items-center gap-3 rounded-lg px-2 py-2">
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[var(--color-primary)] text-sm font-extrabold text-white">
+              {session.user?.name?.[0]?.toUpperCase() || "U"}
+            </div>
+            <div className="min-w-0 flex-1">
+              <p className="truncate text-sm font-extrabold">{session.user?.name || "User"}</p>
+              <p className="truncate text-xs text-[var(--color-muted)]">{session.user?.email || ""}</p>
+            </div>
+            <button
+              onClick={() => signOut({ callbackUrl: "/login" })}
+              title="Sign out"
+              className="focus-ring flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-[var(--color-muted)] transition hover:bg-red-50 hover:text-red-600"
+              aria-label="Sign out"
+            >
+              {/* Logout arrow icon */}
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4">
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                <polyline points="16 17 21 12 16 7" />
+                <line x1="21" y1="12" x2="9" y2="12" />
+              </svg>
+            </button>
           </div>
         </div>
       </aside>
@@ -146,12 +172,14 @@ export default function DashboardLayout({
                 <span className="sr-only">Notifications</span>
                 <SignalIcon className="h-5 w-5" />
               </button>
-              <div
-                className="flex h-11 w-11 items-center justify-center rounded-lg bg-[var(--color-primary)] text-sm font-extrabold text-white"
-                aria-label="User profile"
+              <button
+                onClick={() => signOut({ callbackUrl: "/login" })}
+                title={`Sign out (${session.user?.name || "User"})`}
+                className="focus-ring flex h-11 w-11 items-center justify-center rounded-lg bg-[var(--color-primary)] text-sm font-extrabold text-white hover:bg-red-500 transition-colors"
+                aria-label="Sign out"
               >
-                {session.user?.name?.[0] || "U"}
-              </div>
+                {session.user?.name?.[0]?.toUpperCase() || "U"}
+              </button>
             </div>
           </div>
 

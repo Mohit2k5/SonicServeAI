@@ -1,7 +1,11 @@
-import { Request, Response, NextFunction } from 'express';
-import { redis } from '../db';
+import { Request, Response, NextFunction } from "express";
+import { redis } from "../db";
 
-export async function rateLimit(req: Request, res: Response, next: NextFunction) {
+export async function rateLimit(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
   const userId = (req as any).userId;
   if (!userId) return next();
 
@@ -16,7 +20,7 @@ export async function rateLimit(req: Request, res: Response, next: NextFunction)
     }
 
     if (count > limit) {
-      return res.status(429).json({ error: 'Rate limit exceeded' });
+      return res.status(429).json({ error: "Rate limit exceeded" });
     }
     next();
   } catch (err) {

@@ -1,13 +1,21 @@
-'use client';
-import { useSession } from 'next-auth/react';
-import { useState } from 'react';
+"use client";
+import { useSession } from "next-auth/react";
+import { useState } from "react";
+import {
+  CodeIcon,
+  CopyIcon,
+  KeyIcon,
+  ShieldIcon,
+} from "../../../components/Icons";
 
 export default function ApiKeysPage() {
   const { data: session } = useSession();
   const [reveal, setReveal] = useState(false);
   const [copied, setCopied] = useState(false);
-  
-  const apiKey = (session?.user as any)?.api_key || 'vaan_sk_live_••••••••••••••••••••••••••••••••';
+
+  const apiKey =
+    session?.user?.api_key || "sonic_sk_live_********************************";
+  const hiddenKey = "sonic_sk_live_********************************";
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(apiKey);
@@ -17,51 +25,94 @@ export default function ApiKeysPage() {
 
   return (
     <div className="space-y-8">
-      <div>
-        <h1 className="text-2xl font-bold">API Keys</h1>
-        <p className="text-sm text-gray-500">Manage keys for accessing the Sonic Serve AI API and SDK</p>
-      </div>
+      <section className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <p className="text-sm font-extrabold text-[var(--color-accent-strong)]">
+            Developer access
+          </p>
+          <h2 className="mt-2 text-3xl font-extrabold">API keys</h2>
+          <p className="mt-2 text-sm leading-6 text-[var(--color-muted)]">
+            Manage keys for the Sonic Serve AI API and SDK.
+          </p>
+        </div>
+        <span className="status-pill bg-emerald-50 text-[var(--color-accent-strong)]">
+          <ShieldIcon className="h-4 w-4" />
+          Secret key
+        </span>
+      </section>
 
-      <div className="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm space-y-6">
-        <h3 className="font-bold">Secret API Key</h3>
-        <p className="text-sm text-gray-500">Keep this key secret and secure. It grants full access to your Sonic Serve AI account.</p>
-        
-        <div className="flex items-center gap-4">
-          <div className="flex-1 bg-gray-50 p-4 rounded-xl border border-gray-100 font-mono text-sm overflow-hidden truncate">
-            {reveal ? apiKey : 'vaan_sk_live_••••••••••••••••••••••••••••••••'}
+      <section className="panel p-5 sm:p-6">
+        <div className="mb-6 flex items-start gap-4">
+          <span className="flex h-11 w-11 items-center justify-center rounded-lg bg-[var(--color-surface-muted)] text-[var(--color-primary)]">
+            <KeyIcon className="h-5 w-5" />
+          </span>
+          <div>
+            <h3 className="text-xl font-extrabold">Secret API key</h3>
+            <p className="mt-2 max-w-2xl text-sm leading-6 text-[var(--color-muted)]">
+              Keep this key private. It grants access to agent creation,
+              streaming sessions, and account usage.
+            </p>
           </div>
-          <button 
-            onClick={() => setReveal(!reveal)}
-            className="px-6 py-4 border border-gray-100 rounded-xl text-sm font-bold hover:bg-gray-50 transition"
-          >
-            {reveal ? 'Hide' : 'Reveal'}
-          </button>
-          <button 
-            onClick={copyToClipboard}
-            className="px-6 py-4 bg-black text-white rounded-xl text-sm font-bold hover:bg-gray-900 transition shadow-sm min-w-[100px]"
-          >
-            {copied ? 'Copied!' : 'Copy'}
-          </button>
         </div>
-      </div>
 
-      <div className="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm space-y-6">
-        <h3 className="font-bold">SDK Integration</h3>
-        <p className="text-sm text-gray-500">Embed Sonic Serve AI voice into your application using our JavaScript SDK.</p>
-        
-        <div className="bg-gray-900 rounded-2xl p-6 font-mono text-sm text-gray-300 overflow-x-auto">
-          <p className="text-gray-500 mb-4">// Install the SDK</p>
-          <p className="mb-6"><span className="text-blue-400">npm</span> install @vaani-ai/sdk</p>
-          
-          <p className="text-gray-500 mb-4">// Initialize the agent</p>
-          <p className="mb-2"><span className="text-blue-400">import</span> {'{'} Sonic Serve AI {'}'} <span className="text-blue-400">from</span> <span className="text-green-400">'@vaani-ai/sdk'</span>;</p>
-          <p className="mb-2"><span className="text-blue-400">const</span> agent = <span className="text-blue-400">new</span> <span className="text-yellow-400">Sonic Serve AI</span>({'{'}</p>
-          <p className="ml-4">agentId: <span className="text-green-400">'YOUR_AGENT_ID'</span>,</p>
-          <p className="ml-4">apiKey: <span className="text-green-400">'{reveal ? apiKey : 'YOUR_API_KEY'}'</span></p>
-          <p className="mb-2">{'}'});</p>
-          <p><span className="text-blue-400">await</span> agent.<span className="text-yellow-400">connect</span>();</p>
+        <div className="grid gap-3 lg:grid-cols-[1fr_auto_auto]">
+          <code className="min-h-12 overflow-hidden rounded-lg border border-[var(--color-border)] bg-[var(--color-surface-muted)] px-4 py-3 font-mono text-sm text-[var(--color-ink)]">
+            {reveal ? apiKey : hiddenKey}
+          </code>
+          <button
+            type="button"
+            onClick={() => setReveal(!reveal)}
+            className="btn btn-secondary focus-ring"
+          >
+            {reveal ? "Hide" : "Reveal"}
+          </button>
+          <button
+            type="button"
+            onClick={copyToClipboard}
+            className="btn btn-primary focus-ring min-w-28"
+          >
+            <CopyIcon className="h-4 w-4" />
+            {copied ? "Copied" : "Copy"}
+          </button>
         </div>
-      </div>
+        <p
+          aria-live="polite"
+          className="mt-3 min-h-6 text-sm font-bold text-[var(--color-accent-strong)]"
+        >
+          {copied ? "API key copied to clipboard." : ""}
+        </p>
+      </section>
+
+      <section className="grid gap-6 xl:grid-cols-[0.85fr_1.15fr]">
+        <div className="panel p-5 sm:p-6">
+          <span className="mb-5 flex h-11 w-11 items-center justify-center rounded-lg bg-[var(--color-surface-muted)] text-[var(--color-primary)]">
+            <CodeIcon className="h-5 w-5" />
+          </span>
+          <h3 className="text-xl font-extrabold">SDK integration</h3>
+          <p className="mt-3 text-sm leading-6 text-[var(--color-muted)]">
+            Embed voice into your product with an agent ID, key, and WebSocket
+            session.
+          </p>
+        </div>
+
+        <div className="code-panel overflow-hidden">
+          <div className="border-b border-[#273244] px-5 py-3 text-sm font-bold text-white">
+            install-and-connect.sh
+          </div>
+          <pre className="overflow-x-auto p-5 text-sm leading-7">
+            {`npm install @sonicserve/sdk
+
+import { SonicServeAI } from '@sonicserve/sdk';
+
+const agent = new SonicServeAI({
+  agentId: 'YOUR_AGENT_ID',
+  apiKey: '${reveal ? apiKey : "YOUR_API_KEY"}',
+});
+
+await agent.connect();`}
+          </pre>
+        </div>
+      </section>
     </div>
   );
 }

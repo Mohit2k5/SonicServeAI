@@ -1,4 +1,4 @@
-export type UserPlan = 'free' | 'developer' | 'enterprise';
+export type UserPlan = "free" | "developer" | "enterprise";
 
 export interface User {
   id: string;
@@ -31,13 +31,13 @@ export interface VoiceSession {
   ended_at?: Date;
   duration_seconds?: number;
   messages: Array<{
-    role: 'user' | 'assistant' | 'system';
+    role: "user" | "assistant" | "system";
     content: string;
     timestamp: Date;
   }>;
   language_detected?: string;
   tokens_used: number;
-  status: 'active' | 'completed' | 'error';
+  status: "active" | "completed" | "error";
 }
 
 export interface BillingPlan {

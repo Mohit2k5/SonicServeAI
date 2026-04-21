@@ -1,23 +1,35 @@
-import type { Metadata } from 'next';
-import { Inter, Space_Grotesk } from 'next/font/google';
-import './globals.css';
-import SessionProvider from '../components/SessionProvider';
+import type { Metadata } from "next";
+import localFont from "next/font/local";
+import "./globals.css";
+import SessionProvider from "../components/SessionProvider";
 
 export const metadata: Metadata = {
-  title: 'Sonic Serve AI — Real-time Multilingual Voice AI',
-  description: 'AI-powered voice agents powered by Gemini 3 and Deepgram.',
+  title: "Sonic Serve AI | Multilingual Voice Agents",
+  description:
+    "Build real-time voice agents for multilingual customer conversations.",
 };
 
-const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
-const grotesk = Space_Grotesk({ subsets: ['latin'], variable: '--font-grotesk' });
+const sans = localFont({
+  src: "./fonts/GeistVF.woff",
+  variable: "--font-sans",
+  display: "swap",
+});
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+const mono = localFont({
+  src: "./fonts/GeistMonoVF.woff",
+  variable: "--font-mono",
+  display: "swap",
+});
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
-    <html lang="en" className={`${inter.variable} ${grotesk.variable}`}>
-      <body>
-        <SessionProvider>
-          {children}
-        </SessionProvider>
+    <html lang="en" className={`${sans.variable} ${mono.variable}`} suppressHydrationWarning>
+      <body suppressHydrationWarning>
+        <SessionProvider>{children}</SessionProvider>
       </body>
     </html>
   );
